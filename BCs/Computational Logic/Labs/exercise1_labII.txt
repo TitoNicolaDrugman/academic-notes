@@ -1,0 +1,13 @@
+; check tautology (p ∨ q → r) → (p → r) ∧ (q → r)
+
+;declare 3 proposotional letters
+(declare-const p Bool)
+(declare-const q Bool)
+(declare-const r Bool)
+
+;negate everything
+(assert(not(and (=> (=> (and p q) r) (=> p r)) (=> q r))))
+
+(check-sat)
+
+(get-model)

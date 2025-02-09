@@ -1,0 +1,34 @@
+; LAB 12/1/2022
+; EXERCISE 1
+
+; On an island, there live exactly two types of people: knights and knaves.
+; Knights always tell the truth and knaves always lie. I landed on the island,
+; met two inhabitants, A and B, and asked A: ”Is one of you a knight?”. His
+; answer was the negative; what can be said about the types of A and B? Is
+; there more than one possibility?
+
+
+(declare-sort D)
+(declare-const a D)
+(declare-const b D)
+(declare-fun Kni (D) Bool)
+(declare-fun Kna (D) Bool)
+
+; a is either a Kni or a Kna
+(assert (xor (Kni a)(Kna a)))
+
+; b is either a Kni or a Kna
+(assert (xor (Kni b)(Kna b)))
+
+;;;;;;;;;;;;;;;;
+; "Is one of you a knight?"
+; if A is knight, tell the truth
+(assert (=>(Kni a)(not(or (Kni a)(Kni b)))))
+
+; if A is a knave, tell lie
+(assert (=> (Kna a) (or(Kni a)(Kni b))))
+
+
+;(assert (not (and (Kna a)(Kni b))))
+(check-sat)
+(get-value ((Kna a)(Kni a)(Kna b)(Kni b)))

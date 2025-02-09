@@ -1,0 +1,99 @@
+; Z3 ESERCIZIO ALLENAMENTO ESAME CAVALIERI
+
+; Nell'isola dei cavalieri, furfanti e lupi mannari, ogni abitante è un cavaliere o un furfante, mentre alcuni abitanti sono lupi mannari. 
+; Come è noto, i cavalieri dicono sempre la verità, i furfanti mentono sempre e i lupi mannari divorano gli uomini nelle notti di luna piena; 
+; si sa anche che i lupi mannari possono essere indifferentemente cavalieri o furfanti. 
+; Un esploratore incontra tre abitanti dell'isola a, b e c, di cui sa che esattamente uno è un lupo mannaro (pur non sapendo quale).
+; Gli abitanti fanno le seguenti affermazioni: 
+; a  dice che c è il lupo mannaro; 
+; b dice di non essere il lupo mannaro;
+; c dice che almeno due di loro sono furfanti. 
+
+; Chi deve  scegliere l'esploratore fra a,b e c come compagno di viaggio, per evitare di scegliere proprio il lupo mannaro?
+
+(declare-sort D)
+(declare-const a D)
+(declare-const b D)
+(declare-const c D)
+
+(declare-fun C (D) Bool)				; cavalieri
+(declare-fun F (D) Bool)				; furfanti
+(declare-fun L (D) Bool)				; lupi
+
+(assert (forall ((x D))  (xor (C x)(F x))))
+(assert (exists ((x D))  (L x)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(define-fun xor3 ((x Bool)(y Bool)(z Bool)) Bool (and
+		(or x y z)
+		(not (and x y))
+		(not (and x z))
+		(not (and y z))
+))
+
+(define-fun atleast2 ((x Bool)(y Bool)(z Bool)) Bool (and 
+		(or x y z)
+		(not (and x (not y)(not z)))
+		(not (and y (not x)(not z)))
+		(not (and z (not y)(not x)))
+))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; esattamente uno è un lupo mannaro
+(assert (xor3 (L a)(L b)(L c)))
+
+
+; a dice che c è il lupo mannaro; 
+(assert (= (C a) (L c)))
+(assert (= (F a) (not (L c))))
+
+
+; b dice di non essere il lupo mannaro
+(assert (= (C b)(not (L b))))
+(assert (= (F b)(L b)))
+
+; c dice che almeno due di loro sono furfanti
+(assert (= (C c)(atleast2 (F a)(F b)(F c))))
+(assert (= (F c)(not(atleast2 (F a)(F b)(F c)))))
+
+
+
+; Chi deve  scegliere l'esploratore fra a, b e c come compagno di viaggio, per evitare di scegliere proprio il lupo mannaro?
+
+(echo "")
+(echo "-------- SOLUZIONE 1 -------------")
+(check-sat)
+(echo "")
+(echo "lupi mannari:")
+(get-value ((L a)(L b)(L c)))
+
+(echo "")
+(echo "cavalieri:")
+(get-value ((C a)(C b)(C c)))
+
+(echo "")
+(echo "furfanti:")
+(get-value ((F a)(F b)(F c)))
+
+(echo "")
+(assert (not (and (not (L a))(not (L b))(L c))))
+(echo "-------- SOLUZIONE 2 -------------")
+(check-sat)
+(echo "")
+(echo "lupi mannari:")
+(get-value ((L a)(L b)(L c)))
+
+(echo "")
+(echo "cavalieri:")
+(get-value ((C a)(C b)(C c)))
+
+(echo "")
+(echo "furfanti:")
+(get-value ((F a)(F b)(F c)))
+
+(echo "")
+(echo "-------- SOLUZIONE 3 -------------")
+(assert (not (and (not (L a))(not (L c)) (L b))))
+(check-sat)

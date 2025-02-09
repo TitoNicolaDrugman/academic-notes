@@ -1,0 +1,15 @@
+; this is a comment test
+
+;declare constant p q r
+(declare-const p Bool)
+(declare-const q Bool)
+(declare-const r Bool)
+
+; assert (((p → q) → p) → p) .
+(assert(=> (=> (=> p q) p ) p) )
+
+; we check that is consistent
+(check-sat)
+
+; we get the satisfying assignment
+(get-model)

@@ -1,0 +1,76 @@
+; syllogism
+
+; all humans are mortal
+; some mortal are animals
+; -----------------------
+; some humans are animals
+
+; REWRITE
+; forall(x) ( H(x) -> M(x) )
+; exist(x)	( M(x) ^ A(x) )
+; exist(x)	( H(x) ^ A(x) )
+
+; NEGATE THE CONCLSUION
+; forall(x) ( H(x) -> M(x) )
+; exist(x)	( M(x) ^ A(x) )
+; not (exist(x)	( H(x) ^ A(x) ))     =>   forall(x) ( not(H(x)) v not(A(x)) )
+
+; SKOLEMIZE, USE SKOLEM CONSTANT
+; forall(x) ( H(x) -> M(x) )
+; ( M(c) ^ A(c) )
+; forall(x) ( not(H(x)) v not(A(x)) )
+
+; In the Herbrand Universe there is only the constant c, so it is finite
+; NNF (no implies and negation in front of literals)
+; forall(x) ( not(H(x)) v M(x) )
+; ( M(c) ^ A(c) )
+; forall(x) ( not(H(x)) v not(A(x)) )
+
+; INITIALIZE
+; 1. not(H(c)) v M(c)
+; 2. M(c)
+; 3. A(c)
+; 4. not(H(c)) v not(A(c))
+
+; You can use either CDCL or RESOLUTION
+
+; CDCL
+; C0 = {not(H(c)) v M(c), M(c), A(c), not(H(c)) v not(A(c))}
+
+; Propagate 
+; { M(c)[2], A(c)[3] | C0 | * }
+
+; Propagate
+; { M(c)[2], A(c)[3], not(H(c))[4] | C0 | * }
+
+; All clause have been assign in the correct way, no conflict so it is SAT
+; Since the conclusion was negated then the syllogism is NOT CORRECT
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;; 					WITH Z3					;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+; all humans are mortal
+; some mortal are animals
+; -----------------------
+; some humans are animals
+
+(declare-sort D)
+(declare-const c D)
+
+(declare-fun H (D) Bool)		; Humans
+(declare-fun M (D) Bool)		; Mortal
+(declare-fun A (D) Bool)		; Animal
+
+; I.
+(assert (forall ((x D))  (=> (H x) (M x) )))
+
+; II.
+(assert (exists ((x D))  (and (M x)(A x))))
+
+; III. Negate it
+(assert (not (exists ((x D)) (and (H x)(A x)))))
+
+(check-sat)
+

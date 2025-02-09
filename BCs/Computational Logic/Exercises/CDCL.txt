@@ -1,0 +1,64 @@
+1. p4 ∨ p2
+2. ¬p4 ∨ ¬p2
+3. p1 ∨ ¬p3 ∨ ¬p4
+4. ¬p1 ∨ p2
+5. ¬p1 ∨ p4
+6. p1 ∨ p3 ∨ ¬p4
+7. p1 ∨ p4
+
+CDCL
+
+( 0/ | C0 | * )
+
+Decide
+(p2[d] | C0 | *)
+
+Propgate
+(p2[d], ¬p4[2] | C0 | *)
+
+Propagate
+(p2[d], ¬p4[2], ¬p1[5] | C0 | *)
+
+Conflict
+(p2[d], ¬p4[2], ¬p1[5] | C0 | [7] )
+Apply resoution
+¬p1 ∨ p4     p1 ∨ p4
+-----------------------
+		p4
+
+(p2[d], ¬p4[2] | C0 | p4 )
+Conflict, apply resoution
+¬p4 ∨ ¬p2 		p4
+-------------------
+		¬p2
+
+(p2[d] | C0 | ¬p2 )	
+Conflict, apply resolution
+p4 ∨ p2          ¬p2
+--------------------
+		p4 [8]
+p4 decided
+		
+(p4[8] | C0 p4[8] | * )
+
+Propagate
+(p4[8], ¬p2[2] | C0 p4[8] | * )
+
+Propagate
+(p4[8], ¬p2[2], ¬p1[4] | C0 p4[8] | * )
+
+Propagate
+(p4[8], ¬p2[2], ¬p1[4], p3[6] | C0 p4[8] | * )
+
+Conflict
+(p4[8], ¬p2[2], ¬p1[4], p3[6] | C0 p4[8] | [3] )
+
+Since I go to conflict without decided literals than it is UNSAT
+
+1. p4 ∨ p2
+2. ¬p4 ∨ ¬p2
+3. p1 ∨ ¬p3 ∨ ¬p4
+4. ¬p1 ∨ p2
+5. ¬p1 ∨ p4
+6. p1 ∨ p3 ∨ ¬p4
+7. p1 ∨ p4

@@ -1,0 +1,64 @@
+;xor 3 function to assert only one among 3
+(define-fun xor3 ((x Bool) (y Bool) (z Bool)) Bool
+                (and 
+                         (or x y z)
+                         (not (and x y))
+                         (not (and x z))
+                         (not (and y z))
+                 )
+)
+
+; declare propositional for Calculus
+(declare-const C9 Bool)
+(declare-const C10 Bool)
+(declare-const C11 Bool)
+
+; declare propositional for Logic
+(declare-const L9 Bool)
+(declare-const L10 Bool)
+(declare-const L11 Bool)
+
+; declare propositional for Programming
+(declare-const P9 Bool)
+(declare-const P10 Bool)
+(declare-const P11 Bool)
+
+; declare propositional for Physics 
+(declare-const H9 Bool)
+(declare-const H10 Bool)
+(declare-const H11 Bool)
+
+; declare propositional for Algebra
+(declare-const A9 Bool)
+(declare-const A10 Bool)
+(declare-const A11 Bool)
+
+;or 9 or 10 or 11
+(assert (xor3 C9 C10 C11))
+(assert (xor3 L9 L10 L11))
+(assert (xor3 P9 P10 P11))
+(assert (xor3 H9 H10 H11))
+(assert (xor3 A9 A10 A11))
+
+
+;student X wants to attend all C, H, A;
+
+(assert (xor3 C9 H9 A9))
+(assert (xor3 C10 H10 A10))
+(assert (xor3 C11 H11 A11))
+;student Y wants to attend both L and P;
+
+(assert (xor L9 P9))
+(assert (xor L10 P10))
+(assert (xor L11 P11))
+
+;student Z wants to attend C and H but cannot come before 10am.
+
+(assert (xor C10 H10))
+(assert (xor C11 H11))
+
+;check if is consistent
+(check-sat)
+
+;get satisfying assignment
+(get-model)

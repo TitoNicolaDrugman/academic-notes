@@ -1,0 +1,61 @@
+; LAB 17/11/2021
+; Z3
+; EXERCISE 3
+
+(declare-sort D)
+
+(declare-const a D)
+(declare-const b D)
+(declare-const c D)
+
+(declare-fun Kni (D) Bool)			; knights
+(declare-fun Kna (D) Bool)			; knaves
+(declare-fun Wer (D) Bool)			; Werewolves
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; xor3
+(define-fun xor3((x Bool)(y Bool)(z Bool)) Bool (and
+				(or x y z)
+				(not (and x y))
+				(not (and x z))
+				(not (and y z))
+))
+
+
+; at most 2
+(define-fun at2 ((x Bool)(y Bool)(z Bool)) Bool (or 
+							(and x y)
+							(and x z)
+							(and y z)
+))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+; every habitatant is either a knight or a nave
+(assert (forall ((x D)) (xor (Kni x)(Kna x))  ))
+
+; while some abitants are werewolves
+(assert (exists ((x D)) (Wer x  )))
+
+; werewolves can be either knight or knaves
+(assert (forall ((x D)) (=> (Wer x)(xor (Kni x)(Kna x)))))
+
+; one is a werewolf
+(assert (xor3 (Wer a)(Wer b)(Wer c)))
+
+; a says that c is a werewolf
+(assert (=> (Kni a) (Wer c)))
+(assert (=> (Kna a)(not (Wer c))))
+
+; b says he is a werewolf
+(assert (=> (Kni b)(Wer b)))
+(assert (=> (Kna b)(not (Wer b))))
+
+; c says that at least two of them are knaves
+(assert (=> (Kni c) (at2 (Kna a)(Kna b)(Kna c))))
+(assert (=> (Kna c) (at2 (Kna a)(Kna b)(Kna c))))
+ 
+(check-sat)
+(get-value ((Kni a)(Kna a)(Wer a)))
+(get-value ((Kni b)(Kna b)(Wer b)))
+(get-value ((Kni c)(Kna c)(Wer c)))

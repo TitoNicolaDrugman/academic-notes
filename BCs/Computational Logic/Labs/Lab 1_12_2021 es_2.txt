@@ -1,0 +1,54 @@
+; LAB 1/12/2021
+; EXERCISE 2
+
+(declare-const mixed_fruit Int)
+(declare-const french_fries Int)
+(declare-const side_salad Int)
+(declare-const hot_wings Int)
+(declare-const mozzarella_sticks Int)
+(declare-const sampler_plate Int)
+
+(assert (>= mixed_fruit 0))
+(assert (>= french_fries 0))
+(assert (>= side_salad 0))
+(assert (>= hot_wings 0))
+(assert (>= mozzarella_sticks 0))
+(assert (>= sampler_plate 0))
+
+
+(assert ( = 15.05 ( +
+					(* mixed_fruit 2.15)
+					(* french_fries 2.75)
+					(* side_salad 3.35)
+					(* hot_wings 3.55)
+					(* mozzarella_sticks 4.20)
+					(* sampler_plate 5.80)
+)))
+
+;(declare-const m Int)
+;(assert (= m (+ mixed_fruit french_fries side_salad hot_wings mozzarella_sticks sampler_plate)))
+;(maximise m)
+;(minimize m)
+
+(check-sat)
+(get-value (mixed_fruit))
+(get-value (french_fries))
+(get-value (side_salad))
+(get-value (hot_wings))
+(get-value (mozzarella_sticks))
+(get-value (sampler_plate))
+;(get-value (m))
+
+
+(assert (not (and (= mixed_fruit 1)(= hot_wings 2)(= sampler_plate 1))))
+(check-sat)
+(get-value (mixed_fruit))
+(get-value (french_fries))
+(get-value (side_salad))
+(get-value (hot_wings))
+(get-value (mozzarella_sticks))
+(get-value (sampler_plate))
+
+
+(assert (not (= mixed_fruit 7)))
+(check-sat)

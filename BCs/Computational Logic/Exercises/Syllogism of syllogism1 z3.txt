@@ -1,0 +1,26 @@
+; Z3 SYLLOGISM
+
+; All Humans are Animals
+; All Animals are Mortal
+; ---------------------
+; All Humans are Mortal
+
+
+(declare-sort D)
+(declare-const c D)
+
+(declare-fun H (D) Bool)			; Humans
+(declare-fun A (D) Bool)			; Animals
+(declare-fun M (D) Bool)			; Mortal
+
+; I.
+(assert (forall ((x D)) (=> (H x) (A x))))
+
+; II.
+(assert (forall ((x D)) (=> (A x)(M x))))
+
+; III. Negate the conclsuion
+(assert (not (forall ((x D))  (=> (H x)(M x))  )))
+
+(check-sat)
+; since it is UNSAT, that the syllogism is CORRECT

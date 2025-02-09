@@ -1,0 +1,47 @@
+; Z3
+; LAB 24_11_21
+; EXERCISE 3
+
+(declare-sort D)
+
+(declare-const a D)				; andrea
+(declare-const b D)				; beatrice
+(declare-const c D)				; carlo
+(declare-const d D)				; davide
+
+(declare-fun L (D) Bool)		; lier
+(declare-fun E (D) Bool)		; eat
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; create xor4
+(define-fun xor4 ((x Bool)(y Bool)(z Bool)(w Bool))Bool 
+		(and 
+			(or x y z w)
+			(not (and x y))
+			(not (and x z))
+			(not (and x w))
+			(not (and y z))
+			(not (and y w))
+			(not (and z w))
+))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+; only one is telling the truth
+(assert (xor4 (not (L a))(not (L b))(not (L c))(not (L d))))		; we could also use a normal or
+
+; andrea: beatrice ate the sausages
+(assert (= (not (L a)) ( E b) ))
+
+; beatrice: davide ate them all
+(assert (=   (not (L b)) ( E d)))
+
+; carlo: I didn't have them
+(assert (= (not (L c)) (not (E c)  )))
+
+; davide: beatrice is lying
+(assert (= (not (L d)) (L b)))
+
+(check-sat)
+(get-value ((E a)(E b)(E c)(E d)))
+

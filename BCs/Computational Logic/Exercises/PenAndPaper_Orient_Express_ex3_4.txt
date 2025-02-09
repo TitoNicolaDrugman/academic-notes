@@ -1,0 +1,92 @@
+PEN AND PAPER EXERCISE 3.1
+
+All suspects are passengers on the Orient Express
+Some of the suspects have been questioned.
+Some suspects are guilty.
+----------------
+Some Orient Express passengers who have been questioned are guilty
+
+
+REWRITE
+S, Q, G, P predicates of arity 1
+
+forall(x) ( S(x) -> P(x) )
+exists(x) ( S(x) ^ Q(x) )
+exists(x) ( S(x) ^ G(x) )
+---------------------------------
+exists(x) ( P(x) ^ Q(x) ^ G(x) )
+
+
+NEGATE THE THESIS
+forall(x) ( S(x) -> P(x) )
+exists(x) ( S(x) ^ Q(x) )
+exists(x) ( S(x) ^ G(x) )
+---------------------------------
+not(exists(x) ( P(x) ^ Q(x) ^ G(x) ))   =>  forall(x) ( not(P(x)) v not(Q(x)) v not(G(x)) ) 
+
+
+SKOLEMIZE, use two skolem constant c, d
+forall(x) ( S(x) -> P(x) )
+S(c) ^ Q(c)
+S(d) ^ G(d)
+---------------------------------
+forall(x) ( not(P(x)) v not(Q(x)) v not(G(x)) ) 
+
+CNF 
+forall(x) ( not(S(x)) v P(x) )
+S(c) ^ Q(c)
+S(d) ^ G(d)
+---------------------------------
+forall(x) ( not(P(x)) v not(Q(x)) v not(G(x)) ) 
+
+
+INTIALISE
+not(S(c)) v P(c)
+not(S(d)) v P(d)
+S(c)
+Q(c)
+S(d)
+G(d)
+not(P(c)) v not(Q(c)) v not(G(c)
+not(P(d)) v not(Q(d)) v not(G(d)
+
+
+CDCL
+C0:
+1. not(S(c)) v P(c)
+2. not(S(d)) v P(d)
+3. S(c)
+4. Q(c)
+5. S(d)
+6. G(d)
+7. not(P(c)) v not(Q(c)) v not(G(c)
+8. not(P(d)) v not(Q(d)) v not(G(d)
+
+Propagate
+{ S(c)[3], Q(c)[4], S(d)[5], G(d)[6] | C0 | * }
+
+Propagate
+{ S(c)[3], Q(c)[4], S(d)[5], G(d)[6], P(c)[1]  | C0 | * }
+
+Propagate
+{ S(c)[3], Q(c)[4], S(d)[5], G(d)[6], P(c)[1], P(d)[2] | C0 | * }
+
+Propagate
+{ S(c)[3], Q(c)[4], S(d)[5], G(d)[6], P(c)[1], P(d)[2], not(G(c))[7] | C0 | * }
+
+
+Propagate
+{ S(c)[3], Q(c)[4], S(d)[5], G(d)[6], P(c)[1], P(d)[2], not(G(c))[7], not(Q(d))[8] | C0 | * }
+
+Since all literals have been propagated and no conflict was found than it is SAT
+Since it is SAT then the sillogism is NOT CORRECT
+
+
+1. not(P(c)) v S(c)
+2. not(P(d)) v S(d)
+3. S(c)
+4. Q(c)
+5. S(d)
+6. G(d)
+7. not(P(c)) v not(Q(c)) v not(G(c)
+8. not(P(d)) v not(Q(d)) v not(G(d)

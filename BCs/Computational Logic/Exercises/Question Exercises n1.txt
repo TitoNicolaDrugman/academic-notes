@@ -1,0 +1,86 @@
+QUESTION EXERCISE 1
+
+Suppose we are given a language L consisting of a binary predicate R, a
+unary predicate P and the individual constants a, b, c.
+
+R binary
+P unary
+a,b,c individual constants
+
+R(P(x), y)
+∃x(P(x) ∧ R(x, x))
+∃x(R(x, y) ∧ P(x))
+P(a)
+R(a, x) → P(c)
+∀x∀y(R(x, y) → R(y, x))
+
+which ones are grammatically correct? which ones are sentences? which
+ones are open? which ones are ground? which ones are universal?
+
+;;;;;;;;;;;;;;;;;;;;;;;;; 
+1. R(P(x), y)
+Not correct, since both P(x) and R(x) are both predicates and you can not have R(P(x), y)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;
+2. ∃x(P(x) ∧ R(x, x))
+It is grammatically correct
+A sentence is a formula in which no variable occours free, since x is always not free that it is a sentence
+It is not open since there is no free variable
+It is not ground since x is a variable
+it is not universal, since there aren't only universal quantifier
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+3. ∃x(R(x, y) ∧ P(x))
+It is grammatically correct
+A formula is a sentence if no variable occours free, since y occurs free it is not a sentence
+It is open since y is a free variable
+It is not ground since x and y are both variables
+It is not universal since there is no universal quantifier
+
+;;;;;;;;;;;;;;;;;;;;;;;
+4. P(a)
+It is grammatically correct
+A sentence is a formula in which no variable occurs free, since there is no variable it is a sentence
+It is not close since there is no free variable
+It is ground
+It is not universal since there is no universal quantifier
+
+;;;;;;;;;;;;;;;;;;;;;;;;;
+5. R(a, x) → P(c)
+It is grammatically correct
+A sentence is a formula in which no variables occurs free, since x is free it is not a sentence
+It is open since x is a free variable
+It is not ground since x is a variable
+It is not universal since there is no universal quantifier
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+6. ∀x∀y(R(x, y) → R(y, x))
+It is grammatically correct
+A sentence is a formula in which no variable occours free, since both y and x are not free than it is sentence
+It is not open since both x and y are not free
+It is not ground since x and y are variables
+It is universal since there are only universal quantifier
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+1.1 The elements of the Herbrand Universe are a,b,c
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+Skolemize the sentence ∃x∃yR(x, y); what is now the Herbrand universe?
+subsitute d with ∃x, that is
+∃yR(d, y)
+And e for ∃y, that is
+R(d, e)
+
+The Herbrand universe now is composed by
+a,b,c,d,e, so it is finite
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+Skolemize the sentence ∀x∀y∃z(R(x, y) → P(z)); is the Herbrand uni-
+verse now still finite? If not, describe a set of infinite elements of it.
+
+Substitue ∃z with f(x,y) that is
+∀x∀y(R(x, y) → P(f(x,y)))
+f(f(x,y), f(x,y)) it is infinite

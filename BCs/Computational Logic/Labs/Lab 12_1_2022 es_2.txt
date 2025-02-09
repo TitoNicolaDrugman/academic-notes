@@ -1,0 +1,43 @@
+; LAB 12/1/2022
+; EXERCISE 2
+
+; Using z3, determine how many items I can buy from the list below spending at most $ 10 
+; (I do not want to get more than one piece of the same
+; item): (a) apple pie $ 3.10; (b) french fries $ 4.00; (c) candy $ 1.50; (d) coffee
+; $ 1.00; (e) coke $ 3.50; (f) mineral water $ 1.00.
+
+
+(declare-const apple Int)
+(declare-const french Int)
+(declare-const candy Int)
+(declare-const coffe Int)
+(declare-const coke Int)
+(declare-const mineral Int)
+
+(assert (xor (= apple 1)(= apple 0)))
+(assert (xor (= french 1)(= french 0)))
+(assert (xor (= candy 1)(= candy 0)))
+(assert (xor (= coffe 1)(= coffe 0)))
+(assert (xor (= coke 1)(= coke 0)))
+(assert (xor (= mineral 1)(= mineral 0)))
+
+(assert (>= 10  
+			(+ 
+			(* apple 3.10)
+			(* french 4)
+			(* candy 1.5)
+			(* coffe 1)
+			(* coke 3.5)
+			(* mineral 1)
+
+)))
+
+
+(declare-const m Int)
+(assert (= m (+ apple french candy coffe coke mineral)))
+( maximise m)
+
+
+
+(check-sat)
+(get-value (apple french candy coffe coke mineral m))

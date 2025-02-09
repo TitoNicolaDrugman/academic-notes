@@ -1,0 +1,74 @@
+All cats are felon
+No felon is vegetarian
+———————
+No cat is vegetarian
+
+
+;;;;;;;;;;;;;;;;;;;;;;
+FORMALIZATION
+forall(x) 	  C(x) => F(x)
+not(exist(x)) C(x)^ V(x)
+not(exist(x)) C(x)^ V(x)
+
+;;;;;;;;;;;;;;;;;;;;;;
+NEGATE THE THESIS
+forall(x) 	  C(x) => F(x)
+not(exist(x)) C(x)^ V(x)
+exist(x)      C(x)^ V(x)
+
+;;;;;;;;;;;;;;;;;;;;;;
+CNF
+
+forall(x) 	  not(C(x)) v F(x)
+forall(x)	  not(C(x)) v not(V(x))
+exist(x)      C(x) ^ V(x)
+
+;;;;;;;;;;;;;;;;;;;;;
+SKOLEMISE 
+forall(x) 	  not(C(x)) v F(x)
+forall(x)	  not(C(x)) v not(V(x))
+C(a)
+V(a)
+
+;;;;;;;;;;;;;;;;;;;
+INITIALISE
+1. 		not(C(a)) v F(a)
+2.		not(C(a) v not(V(a))
+3.		C(a)
+4.		V(a)
+
+_________________________
+RESOLUTION
+Apply resolution between [1] and [3]
+[1] 	[3]
+-----------------
+	F(a)[5]
+	
+Apply resolution between [2] and [3]
+[2]		[3]
+-----------------
+	not(V(a))[6]
+	
+Apply resolution netween [6] and [4]
+[6]		[4]
+-------------
+	empty box					empty set of clause, so is UNSAT
+	
+Since it is unsat and the conclusion was negated than the syllogism is TRUE
+
+
+
+_________________________
+CDCL
+
+
+( C(a)[3], V(a)[4] | C0 | * )
+
+Propagate
+( C(a)[3], V(a)[4], F(a)[1] | C0 | * )
+
+Conflict
+( C(a)[3], V(a)[4], F(a)[1] | C0 | [2] )
+
+Since I go to conflict without decided literal it is UNSAT
+Since it is unsat and the conclusion was negated at the beginning than the syllogism is TRUE

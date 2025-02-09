@@ -1,0 +1,99 @@
+; Z3
+
+; Ci sono tre berrettini: uno blu, uno rosso e uno verde sull’attaccapanni. 
+; Ogni berrettino ha come proprietario Qui, Quo o Qua. Due berrettini non possono appartenere allo stesso proprietario. 
+; Ogni berrettino ha al proprio interno un’etichetta che dice che il berrettino appartiene a Qui o Quo o Qua. 
+; Nessun berrettino appartiene al proprietario che c’e’ scritto sulla propria etichetta. 
+; L’etichetta sul berrettino blu dice “Qui”, quella sul berrettino rosso dice “Quo” mentre quella sul berrettino verde dice “Qua”. 
+; L’unico ricordo certo che abbiamo, è che il berrettino rosso appartiene a Qui. 
+; Di chi sono gli altri due berrettini? Provare che il berrettino blu appartiene a Qua mentre il berrettino verde appartiene a Quo.
+
+(declare-sort D)
+(declare-const qui D)
+(declare-const quo D)
+(declare-const qua D)
+
+(declare-sort D2)
+(declare-const blu D2)
+(declare-const rosso D2)
+(declare-const verde D2)
+
+(declare-sort D3)
+(declare-const equi D3)						; etichetta qui
+(declare-const equo D3)						; etichetta quo
+(declare-const equa D3)						; etichetta qua
+
+(declare-fun Prop (D D2) Bool)				; propretario
+(declare-fun Hae (D2 D3) Bool)				; ha etichetta
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; xor3
+(define-fun xor3 ((x Bool)(y Bool)(z Bool)) Bool (and 
+			(or x y z)
+			(not (and x y))
+			(not (and x z))
+			(not (and y z))
+))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+; Ogni berrettino ha come proprietario Qui, Quo o Qua
+(assert (forall ((x D2)) (xor3 (Prop qui x)(Prop quo x)(Prop qua x))))
+
+
+; Due berrettini non possono appartenere allo stesso proprietario. 
+(assert (forall ((x D)) (xor3 (Prop x blu)(Prop x rosso)(Prop x verde))))
+
+
+; Ogni berrettino ha al proprio interno un’etichetta che dice che il berrettino appartiene a Qui o Quo o Qua.
+(assert (forall ((x D2)) (xor3 (Hae x equi)(Hae x equo)(Hae x equa))))
+(assert (forall ((x D3)) (xor3 (Hae blu x)(Hae rosso x)(Hae verde x)))) 
+
+
+; Nessun berrettino appartiene al proprietario che c’e’ scritto sulla propria etichetta. 
+(assert (forall ((x D2)) (=> (Hae x equi)(not (Prop qui x)))))
+(assert (forall ((x D2)) (=> (Hae x equo)(not (Prop quo x)))))
+(assert (forall ((x D2)) (=> (Hae x equa)(not (Prop qua x)))))
+
+
+; L’etichetta sul berrettino blu dice “Qui”, quella sul berrettino rosso dice “Quo” mentre quella sul berrettino verde dice “Qua”. 
+(assert (Hae blu equi))
+(assert (Hae rosso equo))
+(assert (Hae verde equa))
+
+
+; L’unico ricordo certo che abbiamo, è che il berrettino rosso appartiene a Qui. 
+(assert (Prop qui rosso))
+
+
+; Di chi sono gli altri due berrettini? Provare che il berrettino blu appartiene a Qua mentre il berrettino verde appartiene a Quo.
+(check-sat)
+(echo "")
+(echo "QUI: ")
+(get-value ((Prop qui blu)(Prop qui rosso)(Prop qui verde)))
+
+(echo "")
+(echo "QUO: ")
+(get-value ((Prop quo blu)(Prop quo rosso)(Prop quo verde)))
+
+(echo "")
+(echo "QUA: ")
+(get-value ((Prop qua blu)(Prop qua rosso)(Prop qua verde)))
+
+(echo "")
+(echo "----------------------")
+(echo "")
+(echo "etichetta blu: ")
+(get-value ((Hae blu equi)(Hae blu equo)(Hae blu equa)))
+
+(echo "")
+(echo "etichetta rosso: ")
+(get-value ((Hae rosso equi)(Hae rosso equo)(Hae rosso equa)))
+
+(echo "")
+(echo "etichetta verde: ")
+(get-value ((Hae verde equi)(Hae verde equo)(Hae verde equa)))
+
+
+

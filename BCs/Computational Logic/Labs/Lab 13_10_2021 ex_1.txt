@@ -1,0 +1,24 @@
+; LAB 13.10.2021
+; EXERCISE 1
+
+; check satisfiability
+(declare-const p Bool)
+(declare-const q Bool)
+
+(assert (and (=> p q)(not (and p q))))
+
+(check-sat)
+(get-value (p q))
+
+;;;; from z3 to be SAT p must be false and q must be false
+;;;; negate the solution to check if there are other solutions
+
+(assert p)
+(assert q)
+
+(check-sat)
+(get-value (p q))	; the model is not available since it is UNSAT
+
+;;; in conclusion there is only one solution tha is
+; p false
+; q false

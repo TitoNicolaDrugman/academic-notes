@@ -1,0 +1,100 @@
+(declare-const italy1 Bool)
+(declare-const italy2 Bool)
+(declare-const italy3 Bool)
+
+(declare-const austria1 Bool)
+(declare-const austria2 Bool)
+(declare-const austria3 Bool)
+
+(declare-const switzerland1 Bool)
+(declare-const switzerland2 Bool)
+(declare-const switzerland3 Bool)
+
+(declare-const france1 Bool)
+(declare-const france2 Bool)
+(declare-const france3 Bool)
+
+(declare-const germany1 Bool)
+(declare-const germany2 Bool)
+(declare-const germany3 Bool)
+;declaration of the ternary function xor3: it holds iff just one of its arguments is true
+
+(define-fun xor3 ((x Bool) (y Bool) (z Bool)) Bool
+                (and 
+                         (or x y z)
+                         (not (and x y))
+                         (not (and x z))
+                         (not (and y z))
+                 )
+)
+
+(define−fun nand ((x Bool) (y Bool) ) Bool
+ (or 
+        (and x (not y))
+        (and (not x) y)
+        (and (not x) (not y))
+)
+)
+
+(assert (xor3 italy1 italy2 italy3))
+
+(assert (xor3 austria1 austria2 austria3))
+
+(assert (xor3 switzerland1 switzerland2 switzerland3))
+
+(assert (xor3 france1 france2 france3))
+
+(assert (xor3 germany1 germany2 germany3))
+
+(assert (nand italy1 france1)) 
+(assert (nand italy2 france2))
+(assert (nand italy3 france3))
+
+(assert (nand italy1 switzerland1))
+(assert (nand italy2 switzerland2))
+(assert (nand italy3 switzerland3))
+
+(assert (nand italy1 austria1))
+(assert (nand italy2 austria2))
+(assert (nand italy3 austria3))
+
+(assert (nand austria1 switzerland1))
+(assert (nand austria2 switzerland2))
+(assert (nand austria3 switzerland3))
+
+(assert (nand austria1 germany1))
+(assert (nand austria2 germany2))
+(assert (nand austria3 germany3))
+
+(assert (nand switzerland1 germany1))
+(assert (nand switzerland2 germany2))
+(assert (nand switzerland3 germany3))
+
+(assert (nand switzerland1 france1))
+(assert (nand switzerland2  france2))
+(assert (nand switzerland3 france3))
+
+
+
+(assert (nand france1 germany1))
+(assert (nand france2 germany2))
+(assert (nand france3 germany3))
+
+
+
+
+; we check that is consistent
+(check-sat)
+
+; we get the satisfying assignment
+(get-model)
+
+---------
+
+(define−fun nand ((x Bool) (y Bool) ) Bool
+ (or 
+        (and x (not y))
+        (and (not x) y)
+        (and (not x) (not y))
+)
+)

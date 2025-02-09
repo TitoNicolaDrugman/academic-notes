@@ -1,0 +1,101 @@
+PEN AND PAPER EXERCISE 3.4
+
+He who is lucky or knows how to bluff wins at poker and vice versa
+To know how to bluff you need to be smart
+Donald is not smart
+Donald wins at poker if and only if he’s lucky
+
+
+;;;;;;;;;;;;;;;;;; TRAMSFORM TO FORMULA
+
+forall(x) (( L(x) v B(x) ) => W(x) )
+forall(x) ( W(x) => ( L(x) v B(x) ))
+
+forall(x) ( B(x) => S(x) )
+not(S(d))
+-----------
+(W(d) => L(d)) ^ (L(d) => W(d))
+
+
+;;;;;;;;;;;;;;;;;; NEGATE THE THESIS
+
+forall(x) (( L(x) v B(x) ) => W(x) )
+forall(x) ( W(x) => ( L(x) v B(x) ))
+
+forall(x) ( B(x) => S(x) )
+not(S(d))
+not((W(d) => L(d))) v not((L(d) => W(d)))
+
+;;;;;;;;;;;;;;;;;; SKOLEMISE
+;;;;;;;;;;;;;;;;;; PRENEX NORMAL FORMULA
+;;;;;;;;;;;;;;;;;; NNF and CNF
+
+forall(x) (( not(L(x)) ^ not(B(x)) ) v W(x) )
+forall(x) ( not(W(x)) v ( L(x) v B(x) ))
+
+forall(x) ( not(B(x)) v S(x) )
+not(S(d))
+((W(d) ^ not(L(d)))) v ((L(d) ^ not(W(d))))
+
+;;;;;;;;;;;;;;;;;; INITIALISE
+
+1. not(L(d)) v W(d)
+2. not(B(d)) v W(d)
+3. not(W(d)) v L(d) v B(d) 
+4. not(B(d)) v S(d)
+5. not(S(d))
+6. W(d) v L(d)
+7. not(L(d)) v L(d)
+8. W(d) v not(W(d))
+9. not(L(d)) v not(W(d))
+
+The clause n.8 is a tautology, so it can be removed
+
+1. not(L(d)) v W(d)
+2. not(B(d)) v W(d)
+3. not(W(d)) v L(d) v B(d) 
+4. not(B(d)) v S(d)
+5. not(S(d))
+6. W(d) v L(d)
+7. not(L(d)) v L(d)
+8. not(L(d)) v not(W(d))
+
+;;;;;;;;;;;;;;;;; CDCL
+
+( 0/ | C0 | * )
+
+Decide
+( not(W(d))[d] | C0 | * )
+
+Propgate
+( not(W(d)), not(L(d))[1] | C0 | * )
+
+Conflict
+( not(W(d)), not(L(d))[1] | C0 | [6] )
+
+Apply resolution bewenn [1] and [6]
+not(L(d)) v W(d) 		W(d) v L(d)
+------------------------------------
+				W(d)
+
+Conflict
+( not(W(d)) | C0 | W(d) )
+
+W(d) new learned clause
+
+
+( W(d)[9] | C0 [9] | * )
+
+Propagate
+( W(d)[9], not(L(d))[8] | C0 [9] | * )
+
+Propagate
+( W(d)[9], not(L(d))[8], B(d)[3] | C0 [9] | * )
+
+Propagate
+( W(d)[9], not(L(d))[8], B(d)[3], S(d)[4] | C0 [9] | * )
+
+Conflict
+( W(d)[9], not(L(d))[8], B(d)[3], S(d)[4] | C0 [9] | [5] )
+
+Since I go to conflict without decided literal is UNSAT, so the syllogism is true

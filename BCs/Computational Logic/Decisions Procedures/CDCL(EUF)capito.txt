@@ -1,0 +1,271 @@
+; CDCL(EUF)
+
+f(g(a)) /= f(g(b))
+(a = b) ∨ (g(a) = c)
+(g(b) = c) ∨ (f(c) = b)
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+
+FLATTERING
+1. a'' /= b''
+2. (a = b) ∨ (g(a) = c)
+3. (g(b) = c) ∨ (f(c) = b)
+4. g(a) = a'
+5. g(b) = b'
+6. f(a') = a''
+7. f(b') = b''
+
+;;;;;;;;;;;;;;;;;;;;;;;
+			1			2						3				4			      5			 6		         7
+C0 = { a'' /= b'', (a = b) ∨ (g(a) = c), (g(b) = c) ∨ (f(c) = b), g(a) = a',  g(b) = b', f(a') = a'',  f(b') = b'' }
+
+CDCL
+Search state
+{ 0/ | C0 | * }
+
+Propagate
+{ a'' /= b''[1], g(a) = a'[4], g(b) = b'[5], f(a') = a''[6], f(b') = b''[7] | C0 | * }
+
+I need also to have clause 2 true, I can decided a = b
+
+Block 1:
+g(a)
+a'
+
+Block 2:
+g(b)
+b'
+
+Block 3:
+f(a')
+a''
+
+Block 4:
+f(b')
+b''
+
+Block 5:				WE WANT TO CHECK IF a v b IS CONSISTENT
+a
+b
+
+Merge block 1 and block 2 becuase g(a) = g(b) for clause 5, the new blocks are
+Block 1:
+g(a)
+a'
+g(b)
+b'
+
+Block 2:
+f(a')
+a''
+
+Block 3:
+f(b')
+b''
+
+Block 4:			
+a
+b
+
+Merge block 2,3 since f(a')=f(b') for block 1, the new blocks are
+Block 1:
+g(a)
+a'
+g(b)
+b'
+
+Block 2:
+f(a')
+a''
+f(b')
+b''
+
+Block 4:			
+a
+b
+
+
+Since in block 2 we have i and l but we know that a'' /= b'' that is incosistent
+Since it is incosistent that we can affirm that a must be different from b (from the T-propagate rule)
+Add a new clause in C0, we should verify that g(a) = c but for save some time we can do it later, because we don't have any other possibility to satisfy clause 2
+
+
+1. a'' /= b''
+2. (a = b) ∨ (g(a) = c)
+3. (g(b) = c) ∨ (f(c) = b)
+4. g(a) = a'
+5. g(b) = b'
+6. f(a') = a''
+7. f(b') = b''
+8. a /= b
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+Propagate
+( a'' /= b''[1], g(a) = a'[4], g(b) = b'[5], f(a') = a''[6], f(b') = b''[7], a /= b[8], (g(a) = c)[2] | C0 [8] | * )
+
+Test if (g(b) = c) of clause 3 is incosistent, do Congruence Closure
+
+Block 1:
+g(a)
+c
+
+Block 2:
+g(b)
+c
+
+Block 3:
+g(a)
+a'
+
+Block 4:
+g(b)
+b'
+
+Block 5:
+f(a')
+a''
+
+Block 6:
+f(b')
+b''
+
+Merge Block 1 and Block 2 since both have c, the new blocks are:
+Block 1:
+g(a)
+c
+g(b)
+
+
+Block 2:
+g(a)
+a'
+
+Block 3:
+g(b)
+b'
+
+Block 4:
+f(a')
+a''
+
+Block 5:
+f(b')
+b''
+
+Merge Block 1 and Block 2 because both have g(a), and also merge with block 3 becuase g(b), the new blocks are:
+Block 1:
+g(a)
+c
+g(b)
+a'
+b'
+
+Block 2:
+f(a')
+a''
+
+Block 3:
+f(b')
+b''
+
+Merge block 2 and block 3 becuase a' = b' of block 1, the new blocks are:
+Block 1:
+g(a)
+c
+g(b)
+a'
+b'
+
+Block 2:
+f(a')
+a''
+f(b')
+b''
+
+Since we have a'' and b'' in the same block but a''=/b'' from clause 1 than (g(b) = c) of clause 3 is incosistent
+Assert with T-propagate a new clause 9 (g(b) /= c)
+
+
+1. a'' /= b''
+2. (a = b) ∨ (g(a) = c)
+3. (g(b) = c) ∨ (f(c) = b)
+4. g(a) = a'
+5. g(b) = b'
+6. f(a') = a''
+7. f(b') = b''
+8. a /= b
+9. g(b) /= c
+
+Propagate
+( a'' /= b''[1], g(a) = a'[4], g(b) = b'[5], f(a') = a''[6], f(b') = b''[7], a /= b[8], (g(a) = c)[2],  f(c) = b[9] | C0 [9] | * )
+
+We still need to check if (g(a) = c) of clause 2 and (f(c) = b) of clause 3 are consistent, to do so apply congruence closure
+Block 1
+g(a)
+c
+
+Block 2
+f(c)
+b
+
+Block 3
+g(a)
+a'
+
+Block 4
+g(b)
+b'
+
+Block 5
+f(a')
+a''
+
+Block 6
+f(b')
+b''
+
+Merge block 1 and block 3 both have g(a), the new blocks are
+Block 1
+g(a)
+c
+a'
+
+Block 2
+f(c)
+b
+
+Block 3
+g(b)
+b'
+
+Block 4
+f(a')
+a''
+
+Block 5
+f(b')
+b''
+
+Merge block 2 and 4 becuase c = a' of block 1, so f(c)=f(a') the new blocks are
+Block 1
+g(a)
+c
+a'
+
+Block 2
+f(c)
+b
+f(a')
+a''
+
+Block 3
+g(b)
+b'
+
+Block 4
+f(b')
+b''
+
+I can not merge anyhting more so (g(a) = c) of clause 2 and (f(c) = b) of clause 3 are consistent, so it is SAT

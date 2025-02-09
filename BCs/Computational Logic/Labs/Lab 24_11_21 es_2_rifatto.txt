@@ -1,0 +1,36 @@
+; LAB 24 11 21
+; EXERCISE 2
+
+(declare-sort D)
+(declare-const a D)					; antonio
+(declare-const m D)					; michele
+(declare-const g D)					; giovanni
+
+(declare-sort D2)
+(declare-const r D2)				; rain
+(declare-const s D2)				; snow
+
+(declare-fun S (D) Bool)			; skier
+(declare-fun C (D) Bool)			; climber
+
+(declare-fun L (D D2) Bool)			; like
+
+; any member of the club who is not a skier is a climber
+(assert (forall ((x D))  (=> (not(S x)) (C x))))
+
+; climbers do not like rain
+(assert (forall ((x D))   ( => (C x ) (not(L x r)) )))
+
+; any person who does not love snow is not a skier
+(assert (forall ((x D)) (=> (not(L x s))(not (S x)))  ))
+
+; antonio does not love what michael loves
+(assert (forall ((x D2)) ( => (L m x)   (not (L a x)))   ))
+
+; antonio loves rain and snow
+(assert (and (L a r)(L a s)))
+
+(check-sat)
+(get-value (( and (S a) (not (C a)))))
+(get-value (( and (S m) (not (C m)))))
+(get-value (( and (S g) (not (C g)))))

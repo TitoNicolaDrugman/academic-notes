@@ -1,0 +1,35 @@
+; Z3
+;WITH PC EXERCISE 2
+
+
+; I have 3 two euros coins, 2 one euro coin and 6 twenty cent coins; I must
+; pay 6.20 euros at the bar. In how many different ways can I pay?
+
+(declare-const twoeuro Int)
+(declare-const oneeuro Int)
+(declare-const twentycents Int)
+
+(assert (and ( >= twoeuro 0)(< twoeuro 4)))
+(assert (and ( >= oneeuro 0)(< oneeuro 3)))
+(assert (and ( >= twentycents 0)(< twentycents 7)))
+
+(assert (= 6.20	(+
+						(* twoeuro 2)
+						(* oneeuro 1)
+						(* twentycents 0.20)
+)))
+
+; negate first solution
+(assert  (not (and ( = twoeuro 2)( = oneeuro 2)( = twentycents 1)       )))
+
+; negate second solution
+(assert  (not (and ( = twoeuro 2) ( = oneeuro 1) ( = twentycents 6) )))
+
+; negate third solution
+(assert  (not (and ( = twoeuro 3) ( = oneeuro 0) ( = twentycents 1) )))
+
+
+; since I get unsat there are only three possible solutions
+
+(check-sat)
+(get-value (twoeuro oneeuro twentycents ))

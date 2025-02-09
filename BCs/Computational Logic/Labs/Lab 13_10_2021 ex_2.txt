@@ -1,0 +1,11 @@
+; LAB 13.10.2021
+; EXERCISE 2
+
+; check tautology
+(declare-const p Bool)
+(declare-const q Bool)
+
+; negate the entire formula, if it is unsat than it is a tautology, if it is sat than is not a tautology
+(assert (not 		(=>(=>(=> p q) p) p)		))
+
+(check-sat)

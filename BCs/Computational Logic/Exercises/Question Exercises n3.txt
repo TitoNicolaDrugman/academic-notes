@@ -1,0 +1,19 @@
+QUESTION EXERCISE 3
+
+Using two unary predicate symbols S for ‘student’ and D for ‘diligent’,
+write down a correct formalization of the following English sentences:
+
+• All Students are Diligent.
+forall(x) S(x) -> D(x)
+
+
+• No Student is Diligent.
+forall(x) D(x) -> not(S(x))
+
+
+• Only Diligent people can be Students.
+forall(x) S(x) -> D(x)
+
+
+• Some Students are Diligent.
+exist(x) S(x) ^ D(x)
